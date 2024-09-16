@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch JSON Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .user {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .user h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+        .user p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Users from API</h1>
+    <div id="data"></div>
+
+    <script>
+        // URL API خود را جایگزین کنید
+        const apiUrl = 'http://127.0.0.1:8000/license_api/';
+
+        async function fetchData() {
+            try {
+                const response = await fetch(apiUrl);
+
+                // بررسی وضعیت پاسخ
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // تبدیل پاسخ به JSON
+                const data = await response.json();
+
+                // انتخاب عنصر HTML برای نمایش داده‌ها
+                const dataContainer = document.getElementById('data');
+
+                // بررسی اینکه آیا داده‌ها آرایه هستند یا نه
+                if (Array.isArray(data)) {
+                    // تولید HTML برای هر کاربر
+                    const userHtml = data.map(user => `
+                        <div class="user">
+                            <h2>${user.username}</h2>
+                            <p><strong>Email:</strong> ${user.email}</p>
+                        </div>
+                    `).join('');
+
+                    // اضافه کردن HTML تولید شده به صفحه
+                    dataContainer.innerHTML = userHtml;
+                } else {
+                    dataContainer.innerHTML = 'No data available';
+                }
+            } catch (error) {
+                // نمایش خطا در صورت بروز مشکل
+                console.error('There has been a problem with your fetch operation:', error);
+                const dataContainer = document.getElementById('data');
+                dataContainer.innerHTML = `Error fetching data: ${error.message}`;
+            }
+        }
+
+        // اجرای تابع برای دریافت داده‌ها
+        fetchData();
+    </script>
+</body>
+</html>

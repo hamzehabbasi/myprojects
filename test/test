@@ -1,0 +1,45 @@
+
+#HASH=$("sha1sum ${FILE}")
+#if [[ "${HASH}" = "eb8babfc77e8b004b1cac5deecd8dd08b8e9b902  start_business_v55d35y4.py" ]]
+#then
+#    echo "ok"
+#else
+#    echo "Error 404: Files have changed!"
+#fi
+
+#bash
+#FILE="/home/hamzeh/Desktop/test/start_business_v55d35y4.py"
+#HASH=$(sha1sum ${FILE})
+##HASH= $"eb8babfc77e8b004b1cac5deecd8dd08b8e9b902  start_business_v55d35y4.py" | rev | cut -c 1-32
+#if [[ "${HASH}" = "eb8babfc77e8b004b1cac5deecd8dd08b8e9b902  ${FILE}" ]]
+#then
+#    echo "ok"
+#else
+#    echo "Error 404: Files have changed!"
+#fi
+
+#FILE="/home/hamzeh/Desktop/test/django_command_management.py"
+#HASH_BY_CONTENT=$(sha1sum ${FILE} | cut -c 1-8)
+#HASH_BY_NAME=$(echo $FILE | rev | cut -c 4-11 | rev)
+#if [[ "${HASH_BY_NAME}" != "${HASH_BY_CONTENT}" ]]
+#then
+#    echo "Error on ${FILE}"
+#    echo "HASH by NAME: ${HASH_BY_NAME}"
+#    echo "HASH by CONTENT: ${HASH_BY_CONTENT}"
+##    exit 1
+#fi
+
+
+DIRECTORY="/home/hamzeh/Desktop/test/"
+
+for FILE in ${DIRECTORY}*.py ; do
+  HASH_BY_CONTENT=$(sha1sum ${FILE} | cut -c 1-8)
+  HASH_BY_NAME=$(echo $FILE | rev | cut -c 4-11 | rev)
+  if [[ "${HASH_BY_NAME}" != "${HASH_BY_CONTENT}" ]]
+  then
+      echo "Error on ${FILE}"
+      echo "HASH by NAME: ${HASH_BY_NAME}"
+      echo "HASH by CONTENT: ${HASH_BY_CONTENT}"
+#      exit 1
+  fi
+done
